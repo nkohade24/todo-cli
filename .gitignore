@@ -1,0 +1,6 @@
+# Runtime data
+tasks.json
+
+# Python
+__pycache__/
+*.py[cod]
