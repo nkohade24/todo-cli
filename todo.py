@@ -48,6 +48,16 @@ def done_task(number):
     print(f"Marked task as done: {task['task']}")
 
 
+def delete_task(number):
+    tasks = load_tasks()
+    if number < 1 or number > len(tasks):
+        print(f"No task numbered {number}.")
+        return
+    task = tasks.pop(number - 1)
+    save_tasks(tasks)
+    print(f"Deleted task: {task['task']}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="A simple todo CLI.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -60,6 +70,9 @@ def main():
     done_parser = subparsers.add_parser("done", help="Mark a task as completed")
     done_parser.add_argument("number", type=int, help="The task number (as shown by list)")
 
+    delete_parser = subparsers.add_parser("delete", help="Delete a task by its number")
+    delete_parser.add_argument("number", type=int, help="The task number (as shown by list)")
+
     args = parser.parse_args()
 
     if args.command == "add":
@@ -68,6 +81,8 @@ def main():
         list_tasks()
     elif args.command == "done":
         done_task(args.number)
+    elif args.command == "delete":
+        delete_task(args.number)
 
 
 if __name__ == "__main__":
