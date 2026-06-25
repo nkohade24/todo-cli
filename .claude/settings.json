@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Running pytest...",
+            "command": "C:/Users/NITISH/miniconda3/python.exe D:/personal_project/todo-cli/run_tests_hook.py"
+          }
+        ]
+      }
+    ]
+  }
+}
