@@ -86,3 +86,18 @@ def test_delete_out_of_range_does_nothing():
     todo.delete_task(0)
 
     assert todo.load_tasks() == [{"task": "Keep me", "done": False}]
+
+
+def test_clear_removes_all_tasks():
+    todo.add_task("First")
+    todo.add_task("Second")
+
+    todo.clear_tasks()
+
+    assert todo.load_tasks() == []
+
+
+def test_clear_on_empty_is_noop():
+    todo.clear_tasks()
+
+    assert todo.load_tasks() == []

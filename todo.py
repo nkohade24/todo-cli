@@ -58,6 +58,13 @@ def delete_task(number):
     print(f"Deleted task: {task['task']}")
 
 
+def clear_tasks():
+    tasks = load_tasks()
+    count = len(tasks)
+    save_tasks([])
+    print(f"Cleared {count} task{'s' if count != 1 else ''}.")
+
+
 def main():
     parser = argparse.ArgumentParser(description="A simple todo CLI.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -73,6 +80,8 @@ def main():
     delete_parser = subparsers.add_parser("delete", help="Delete a task by its number")
     delete_parser.add_argument("number", type=int, help="The task number (as shown by list)")
 
+    subparsers.add_parser("clear", help="Remove all tasks")
+
     args = parser.parse_args()
 
     if args.command == "add":
@@ -83,6 +92,8 @@ def main():
         done_task(args.number)
     elif args.command == "delete":
         delete_task(args.number)
+    elif args.command == "clear":
+        clear_tasks()
 
 
 if __name__ == "__main__":
