@@ -6,23 +6,26 @@ description: Add a new subcommand to the todo CLI (todo.py). Use when asked to a
 # Add a command to the todo CLI
 
 Add exactly one new subcommand to `todo.py`, following the project's layered
-structure. Do only what was asked — see the rules at the end.
+structure.
+
+**First read [`../_shared-conventions.md`](../_shared-conventions.md)** — it
+covers the patterns every command must follow (persistence layer, single file,
+terse print style, matching test) and the project rules. The steps below only
+cover what's specific to adding a command.
 
 ## Steps
 
 ### 1. Write the command function
 
 Add a `<name>_task()` function near the other command functions (`add_task`,
-`list_tasks`, `done_task`, `delete_task`). It must go through the persistence
-layer — call `load_tasks()` and `save_tasks()`, never touch `tasks.json`
-directly.
+`list_tasks`, `done_task`, `delete_task`). Per the shared conventions, it must
+go through `load_tasks()` / `save_tasks()`.
 
-Follow the existing conventions:
+Command-specific details:
 - Tasks use the dict schema `{"task": <str>, "done": <bool>}`. Don't change it.
 - The CLI is 1-indexed for the user; convert with `index - 1` and validate the
   range before mutating, printing a clear message on bad input (mirror
   `done_task` / `delete_task`).
-- `print()` a short confirmation of what happened.
 
 ```python
 def <name>_task(...):
@@ -45,25 +48,13 @@ with the parsed args. Keep it next to the other branches.
 
 ### 4. Add a test in test_todo.py
 
-Add a test that mirrors the existing tests' style. An autouse fixture
-(`temp_tasks_file`) already monkeypatches `todo.TASKS_FILE` to a throwaway file,
-so just call the command functions directly and assert on `todo.load_tasks()`
-(or on printed output via `capsys`). Cover the happy path
-and, if the command takes a task number, the out-of-range case — matching tests
-like `test_done_*` and `test_delete_*`.
+Add a test that mirrors the existing tests' style (see the shared conventions
+for the fixture and assertion approach). Cover the happy path and, if the
+command takes a task number, the out-of-range case — matching tests like
+`test_done_*` and `test_delete_*`.
 
 ### 5. Run the tests
-
-Confirm everything passes:
 
 ```bash
 python -m pytest -v
 ```
-
-## Rules (from CLAUDE.md)
-
-- Standard library only — no third-party packages.
-- Build **one** command at a time. Don't add commands that weren't asked for.
-- Keep `todo.py` a single file.
-- Don't change unrelated code.
-- After changing code, run the tests to confirm it works.
