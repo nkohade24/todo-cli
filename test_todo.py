@@ -31,6 +31,18 @@ def test_add_starts_from_empty():
     assert todo.load_tasks() == []
 
 
+def test_load_tasks_handles_malformed_file(temp_tasks_file):
+    temp_tasks_file.write_text("{not valid json", encoding="utf-8")
+
+    assert todo.load_tasks() == []
+
+
+def test_load_tasks_handles_empty_file(temp_tasks_file):
+    temp_tasks_file.write_text("", encoding="utf-8")
+
+    assert todo.load_tasks() == []
+
+
 def test_list_empty_prints_no_tasks(capsys):
     todo.list_tasks()
 
